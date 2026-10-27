@@ -2,6 +2,9 @@
 #define OLIVEC_IMPLEMENTATION
 #include "olive.c"
 
+#define OLIVEC_SDL12_IMPLEMENTATION
+#include "olivec-sdl12.h"
+
 #include <SDL/SDL.h>
 #include <unistd.h>
 
@@ -9,52 +12,6 @@
 #define HEIGHT 600
 
 uint32_t pixels[WIDTH*HEIGHT];
-
-/*
- * Set the pixel at (x, y) to the given value
- * NOTE: The surface must be locked before calling this!
- */
-void putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
-{
-    int bpp = surface->format->BytesPerPixel;
-    /* Here p is the address to the pixel we want to set */
-    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
-
-    switch(bpp) {
-    case 1:
-        *p = pixel;
-        break;
-
-    case 2:
-        *(Uint16 *)p = pixel;
-        break;
-
-    case 3:
-        if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
-            p[0] = (pixel >> 16) & 0xff;
-            p[1] = (pixel >> 8) & 0xff;
-            p[2] = pixel & 0xff;
-        } else {
-            p[0] = pixel & 0xff;
-            p[1] = (pixel >> 8) & 0xff;
-            p[2] = (pixel >> 16) & 0xff;
-        }
-        break;
-
-    case 4:
-        *(Uint32 *)p = pixel;
-        break;
-    }
-}
-
-Uint32 hex2uint32(SDL_Surface *surface, uint32_t hex) {
-	Uint8 r = (hex >> 24) & 0xFF;
-	Uint8 g = (hex >> 16) & 0xFF;
-	Uint8 b = (hex >>  8) & 0xFF;
-	Uint8 a =  hex        & 0xFF;
-
-	return SDL_MapRGBA(surface->format, r, g, b, a);
-}
 
 int main(void) {
 	if (SDL_Init(SDL_INIT_VIDEO) == -1) {
