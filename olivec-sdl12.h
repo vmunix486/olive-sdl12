@@ -15,9 +15,8 @@
 // Used for drawing from the olivec_canvas to the screen.
 void putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
 
-// This turns the olive.c hex colors (0xRRGGBBAA) into SDL 1.2's
-// Uint32 color format. They seem like the same thing, but it's
-// a little different.
+// This turns the olive.c hex colors (0xAABBGGRR) into SDL 1.2's
+// Uint32 color format.
 Uint32 hex2uint32(SDL_Surface *surface, uint32_t hex);
 
 #endif
@@ -62,12 +61,12 @@ void putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
 }
 
 Uint32 hex2uint32(SDL_Surface *surface, uint32_t hex) {
-        Uint8 r = (hex >> 24) & 0xFF;
-        Uint8 g = (hex >> 16) & 0xFF;
-        Uint8 b = (hex >>  8) & 0xFF;
-        Uint8 a =  hex        & 0xFF;
+    Uint8 r =  hex        & 0xFF;
+    Uint8 g = (hex >>  8) & 0xFF;
+    Uint8 b = (hex >> 16) & 0xFF;
+    Uint8 a = (hex >> 24) & 0xFF;
 
-        return SDL_MapRGBA(surface->format, r, g, b, a);
+    return SDL_MapRGBA(surface->format, r, g, b, a);
 }
 
 #endif
